@@ -2,96 +2,95 @@
 //  main.c
 //  equal100
 //
-//  Created by Tong Tingting on 13-12-19.
-//  import from Baidu tieba using java
+//  Created by Tong Tingting on 13-12-20.
+//  Copyright (c) 2013年 Tong Tingting. All rights reserved.
 //
 
-import java.util.ArrayList;
-import java.util.List;
-public class sum100 {
-    static final String[] sarr = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-    static final String ADD = "+";
-    static final String MINUS = "-";
-    static final String NUL = "";
-    static final int SUM = 100;
-    private int total;
-    private int probable;
-    void cal(String str) {
-        int sum = 0;
-        List<Integer> nums = new ArrayList<Integer>();
-        List<Character> mark = new ArrayList<Character>();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if ('1' <= c && '9' >= c) {
-                sb.append(c);
-                continue;
-            }
-            if ('+' == c || '-' == c) {
-                nums.add(Integer.parseInt(sb.toString()));
-                sb = new StringBuffer();
-                mark.add(c);
-            }
-        }
-        nums.add(Integer.parseInt(sb.toString()));
-        sum = nums.get(0);
-        for (int i = 0; i < mark.size(); i++) {
-            switch (mark.get(i)) {
-                case '+':
-                    sum += nums.get(i + 1);
-                    break;
-                case '-':
-                    sum -= nums.get(i + 1);
-                    break;
-            }
-        }
-        if (sum == SUM) {
-            System.out.println(str + "=" + sum);
-            System.out.println("-----------------------------------------");
-            probable++;
-        }
+#include <stdio.h>
+
+static char sarr[9]={"1","2","3", "4", "5", "6", "7", "8", "9" };
+char str[8];
+
+int main()
+{
+
+    enum Symbol {
+        NULL = 0,
+        ADD = 1,
+        MINUS = 2
+    };
+    enum Symbol i;
+    void cal(char str);
+    char mix(char str[]);
+    char itos(int i);
+    
+    
+}
+
+
+char mix(char str[])  //数字和运算符交叉连接
+{
+    char sb[17];
+    int i;
+    for (i=0; i<9; i++) {
+        sb[2*i]=sarr[i];
+        sb[2*i+1]=str[i];
     }
-    void method() {
-        String[] str = new String[8];
-        fo(str, 0);
-        System.out.println(probable + "/" + total);
-    }
-    void fo(String[] str, int n) {
-        for (int i = 0; i < 3; i++) {
-            str[n] = itos(i);
-            if (n == 7) {
-                cal(mix(str));
-                total++;
-                if (i == 2)
-                    break;
-            } else {
-                fo(str, n + 1);
-            }
+    return sb;
+}
+
+void cal(char str)
+{
+    int sum=0;
+    char *sb=str;
+    for (; *sb!='\0'; sb++) {
+        if (*sb=='+') {
+            sum+=*(++sb);
         }
-    }
-    String itos(int i) {
-        switch (i) {
-            case 0:
-                return NUL;
-            case 1:
-                return ADD;
-            case 2:
-                return MINUS;
-            default:
-                return null;
+        if (*sb=='-') {
+            sum-=*(++sb);
         }
-    }
-    String mix(String[] str) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < str.length; i++) {
-            sb.append(sarr[i]);
-            sb.append(str[i]);
-        }
-        sb.append(sarr[sarr.length - 1]);
-        return sb.toString();
-    }
-    public static void main(String[] args) {
-        sum100 s = new sum100();
-        s.method();
+        //if (*sb==NULL) {
+            //sum
+        //}
     }
 }
+
+char itos(int i)
+{
+    switch (i) {
+        case 0:
+            return " ";
+            break;
+        case 1:
+            return "+";
+            break;
+        case 2:
+            return "-";
+            break;
+        default:
+            return NULL;
+            break;
+    }
+}
+
+
+void fo(char str[8],int n)
+{
+    
+    int i,total=0;
+    for (i=0; i<=2; i++) {
+     str[n]=itos(i);
+     if (n==7) {
+        cal(mix(str));
+        total++;
+        if(i==2)
+            break;
+    }
+    else{
+        fo(str,n+1);
+    }
+  }
+}
+
+
