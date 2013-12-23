@@ -7,52 +7,70 @@
 //
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-static char sarr[9]={"1","2","3", "4", "5", "6", "7", "8", "9" };
-char str[8];
+static char sarr[9]={'1','2','3', '4', '5', '6', '7', '8', '9' };
+
 
 int main()
 {
 
-    enum Symbol {
-        NULL = 0,
-        ADD = 1,
-        MINUS = 2
-    };
-    enum Symbol i;
-    void cal(char str);
+    void cal(char str[]);
     char mix(char str[]);
     char itos(int i);
-    
+    void fo(char str[8],int n);
+    char str[8]={0};
+    fo(str,0);
     
 }
 
 
-char mix(char str[])  //数字和运算符交叉连接
+char mix(char star[])  //数字和运算符交叉连接
 {
-    char sb[17];
-    int i;
+    char mixx[17]={0};
+    int i,lenth=0;
     for (i=0; i<9; i++) {
-        sb[2*i]=sarr[i];
-        sb[2*i+1]=str[i];
+        if (sarr[i]!='\0') {
+            mixx[lenth++]=sarr[i];
+        }
+        if (star[i]!='\0') {
+            mixx[lenth++]=sarr[i];
+        }
+        
     }
-    return sb;
+    return mixx;
 }
 
-void cal(char str)
+void cal(char str[])
 {
-    int sum=0;
+    int sum=0,n=0;
     char *sb=str;
+    char strr={'+'},nchar[]={0};
     for (; *sb!='\0'; sb++) {
-        if (*sb=='+') {
-            sum+=*(++sb);
+        if (*sb>='1'&&*sb<='9') {
+            n=n*10+*sb-'0';
+            continue;
         }
-        if (*sb=='-') {
-            sum-=*(++sb);
+        sprintf(nchar, "%d",n);
+        strcat(&strr, nchar);
+        n=0;
+        if (*sb=='+'||*sb=='-') {
+            strcat(&strr, sb);
         }
-        //if (*sb==NULL) {
-            //sum
-        //}
+    }
+    for (char *i=&strr; *i!='\0'; i++) {
+        switch (*i) {
+            case '+':
+                sum+=*(++i);
+                break;
+            case '-':
+                sum-=*(--i);
+                break;
+        }
+    }
+    if (sum==100) {
+        printf("%hhd",strr);
     }
 }
 
@@ -60,16 +78,13 @@ char itos(int i)
 {
     switch (i) {
         case 0:
-            return " ";
+            return '+';
             break;
         case 1:
-            return "+";
+            return '-';
             break;
         case 2:
-            return "-";
-            break;
-        default:
-            return NULL;
+            return ' ';
             break;
     }
 }
@@ -78,19 +93,18 @@ char itos(int i)
 void fo(char str[8],int n)
 {
     
-    int i,total=0;
+    int i;
     for (i=0; i<=2; i++) {
-     str[n]=itos(i);
-     if (n==7) {
-        cal(mix(str));
-        total++;
-        if(i==2)
-            break;
+        str[n]=itos(i);
+        if (n==7) {
+           cal(mix(str));
+           if(i==2)
+              break;
+        }
+        else{
+           fo(str,n+1);
+        }
     }
-    else{
-        fo(str,n+1);
-    }
-  }
 }
 
 
